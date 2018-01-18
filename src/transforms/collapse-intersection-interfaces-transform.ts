@@ -16,7 +16,7 @@ export function collapseIntersectionInterfacesTransformFactoryFactory(
         typeChecker: ts.TypeChecker,
     ): ts.TransformerFactory<ts.Node> {
     return function collapseIntersectionInterfacesTransformFactory(context: ts.TransformationContext) {
-        return function collapseIntersectionInterfacesTransform(sourceFile: ts.SourceFile) {
+        return function collapseIntersectionInterfacesTransform(sourceFile: ts.Node) {
             const visited = ts.visitEachChild(sourceFile, visitor, context);
             ts.addEmitHelpers(visited, context.readEmitHelpers());
 
@@ -35,16 +35,17 @@ export function collapseIntersectionInterfacesTransformFactoryFactory(
                     helpers.isIntersectionTypeNode(node.type)
                     && node.type.types.every((type) => helpers.isTypeLiteralNode(type))
                 ) {
-                    const allMembers = node.type.types
-                        .map((type: ts.TypeLiteralNode) => type.members)
-                        .reduce((all, members) => ts.createNodeArray(all.concat(members)), ts.createNodeArray([]));
+                    const allMembers = node.type.types;
+
+                        // .map((typeNode: ts.TypeNode) => typeNode)
+                        // .reduce((all, members) => ts.createNodeArray(all.concat(members)), ts.createNodeArray<ts.TypeNode>([]));
 
                     return ts.createTypeAliasDeclaration(
                         [],
                         [],
                         node.name.text,
                         [],
-                        ts.createTypeLiteralNode(allMembers),
+                        ts.createTypeLiteralNode([]),
                     );
                 }
 

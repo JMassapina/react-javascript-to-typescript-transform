@@ -11,7 +11,7 @@ export type Factory = ts.TransformerFactory<ts.Node>;
  */
 export function reactJSMakePropsAndStateInterfaceTransformFactoryFactory(typeChecker: ts.TypeChecker): Factory {
     return function reactJSMakePropsAndStateInterfaceTransformFactory(context: ts.TransformationContext) {
-        return function reactJSMakePropsAndStateInterfaceTransform(sourceFile: ts.SourceFile) {
+        return function reactJSMakePropsAndStateInterfaceTransform(sourceFile: ts.Node) {
             const visited = ts.visitEachChild(sourceFile, visitor, context);
             ts.addEmitHelpers(visited, context.readEmitHelpers());
 

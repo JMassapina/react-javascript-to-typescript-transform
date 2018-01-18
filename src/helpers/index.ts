@@ -1,7 +1,7 @@
 import * as ts from 'typescript';
-import * as kinds from './isKind';
+import * as kinds from 'ts-is-kind';
 
-export * from './isKind';
+export * from 'ts-is-kind';
 
 /**
  * If a class declaration a react class?
@@ -107,7 +107,7 @@ export function isPropTypesMember(classMember: ts.ClassElement, sourceFile: ts.S
  * @param collection
  * @param matcher
  */
-export function find<T>(collection: T[], matcher: (item: T) => boolean): T | undefined {
+export function find<T extends ts.Node>(collection: T[] | ts.NodeArray<T>, matcher: (item: T) => boolean): T | undefined {
     for (const item of collection) {
         if (matcher(item)) { return item; }
     }
@@ -120,7 +120,7 @@ export function find<T>(collection: T[], matcher: (item: T) => boolean): T | und
  * @param collection
  * @param matcher
  */
-export function has<T>(collection: T[], matcher: (item: T) => boolean): boolean {
+export function has<T extends ts.Node>(collection: T[] | ts.NodeArray<T>, matcher: (item: T) => boolean): boolean {
     if (!collection || !collection.length) {
         return false;
     }
@@ -138,7 +138,7 @@ export function has<T>(collection: T[], matcher: (item: T) => boolean): boolean 
  * @param afterItem
  * @param newItem
  */
-export function insertAfter<T>(collection: T[], afterItem: T, newItem: T) {
+export function insertAfter<T extends ts.Node>(collection: T[] | ts.NodeArray<T>, afterItem: T, newItem: T) {
     const index = collection.indexOf(afterItem) + 1;
 
     return collection.slice(0, index).concat(newItem).concat(collection.slice(index));
@@ -150,7 +150,7 @@ export function insertAfter<T>(collection: T[], afterItem: T, newItem: T) {
  * @param beforeItem
  * @param newItem
  */
-export function insertBefore<T>(collection: T[], beforeItem: T, newItem: T) {
+export function insertBefore<T extends ts.Node>(collection: T[] | ts.NodeArray<T>, beforeItem: T, newItem: T) {
     const index = collection.indexOf(beforeItem);
 
     return collection.slice(0, index).concat(newItem).concat(collection.slice(index));
@@ -162,7 +162,7 @@ export function insertBefore<T>(collection: T[], beforeItem: T, newItem: T) {
  * @param item
  * @param newItem
  */
-export function replaceItem<T>(collection: T[], item: T, newItem: T) {
+export function replaceItem<T extends ts.Node>(collection: T[] | ts.NodeArray<T>, item: T, newItem: T) {
     const index = collection.indexOf(item);
 
     return collection.slice(0, index).concat(newItem).concat(collection.slice(index + 1));
